@@ -9,6 +9,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 /**
  * Created by delaroy on 4/30/18.*/
@@ -17,9 +18,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class DataServiceGenerator {
     public static <S> S createService(Class<S> serviceClass) {
-        Retrofit.Builder builder = new Retrofit.Builder()
+        Retrofit.Builder builder = new Retrofit.Builder().addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl("http://10.0.2.2:8080/rest/");
+                .baseUrl("https://mytrips8.herokuapp.com/rest/");
 
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder()
                 .readTimeout(190, TimeUnit.SECONDS)

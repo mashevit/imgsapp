@@ -1,8 +1,5 @@
-/*
 package com.example.android.myappimgs.network;
 
-
-import android.text.TextUtils;
 
 import com.example.android.myappimgs.BuildConfig;
 
@@ -18,18 +15,19 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ServiceGenerator {
 
-    public static final String API_BASE_URL = "http://10.0.0.3:8090/rest/";
+    public static final String API_BASE_URL = "https://mytrips8.herokuapp.com/rest/";
+    public static String Token = "";
 
-    private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+  //  private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
-    private static Retrofit.Builder builder =
+  /*  private static Retrofit.Builder builder =
             new Retrofit.Builder()
                     .baseUrl(API_BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create());
 
 
 
-
+*/
 
 
 
@@ -44,9 +42,8 @@ public class ServiceGenerator {
                 .writeTimeout(90, TimeUnit.SECONDS)
                 .cache(null);
 
-
         AuthenticationInterceptor interceptor =
-                new AuthenticationInterceptor("");
+                new AuthenticationInterceptor(Token);
 
         if (!httpClient.interceptors().contains(interceptor)) {
             httpClient.addInterceptor(interceptor);
@@ -68,11 +65,9 @@ public class ServiceGenerator {
 
 
 
-  */
-/*
-    public static <S> S createService(Class<S> serviceClass) {
+/*    public static <S> S createService(Class<S> serviceClass) {
         return createService(serviceClass, null);
-    }*//*
+    }
 
 
     public static <S> S createService(
@@ -91,7 +86,7 @@ public class ServiceGenerator {
         }
 
         return retrofit.create(serviceClass);
-    }
+    }*/
 
 
 
@@ -101,7 +96,7 @@ public class ServiceGenerator {
         private String authToken;
 
         public AuthenticationInterceptor(String token) {
-            this.authToken = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTU0Mzg1ODgzNX0.IxMXxadDLNV0uuVSZ9Z3p67M714CjVwJeOCwYYnfOhtjLrTBfZa22dUNxKsewX8-t1WcP0Q1s975I_lNjjeHEQ";
+            this.authToken = token;
         }
 
         @Override
@@ -116,4 +111,3 @@ public class ServiceGenerator {
         }
     }
 }
-*/
