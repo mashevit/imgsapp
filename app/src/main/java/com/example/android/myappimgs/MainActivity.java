@@ -463,7 +463,7 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
                          public void onResponse(Call<Void> call, Response<Void> response) {
                              ServiceGenerator.Token=response.headers().get("Authorization");
 
-                             fetchData();
+                            // fetchData();
                          }
 
                          @Override
