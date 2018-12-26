@@ -366,7 +366,7 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
 
             }
         }, 3000);*/
-        DataServiceGenerator/*ServiceGenerator*/ dataServiceGenerator = new DataServiceGenerator/*()ServiceGenerator*/();
+      ServiceGenerator dataServiceGenerator = new ServiceGenerator();
         Service service = dataServiceGenerator.createService(Service.class);
         Call<List<TripsModel>> call = service.getTrips();
 
