@@ -32,5 +32,6 @@ public interface  ImgsDao {
    /* @Query("SELECT * FROM IMGS_TABLE WHERE sight LIKE :name")
     LiveData<List<Imgs>> getImgsForSight(String name);
 */
-
+   @Query("DELETE FROM IMGS_TABLE")
+   public void nukeTable();
 }

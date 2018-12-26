@@ -20,7 +20,7 @@ public class DataServiceGenerator {
     public static <S> S createService(Class<S> serviceClass) {
         Retrofit.Builder builder = new Retrofit.Builder().addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl("https://mytrips8.herokuapp.com/rest/");
+                .baseUrl(ServiceGenerator.API_BASE_URL);
 
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder()
                 .readTimeout(190, TimeUnit.SECONDS)

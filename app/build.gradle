@@ -28,6 +28,10 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:27.1.1'
     implementation 'com.android.support:cardview-v7:27.1.1'
 
+    implementation 'com.android.support:preference-v7:27.1.1'
+    implementation 'com.takisoft.fix:preference-v7:27.1.1.1'
+
+
 
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
@@ -51,6 +55,8 @@ dependencies {
 
     implementation "android.arch.lifecycle:runtime:$lifecycle_version"
     //   implementation 'com.annimon:stream:1.2.1'
+
+
 
 //    implementation 'net.sourceforge.streamsupport:streamsupport:1.6.0'
 //    implementation 'net.sourceforge.streamsupport:streamsupport-cfuture:1.6.0'

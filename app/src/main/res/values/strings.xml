@@ -2,4 +2,76 @@
     <string name="app_name">Myappimgs</string>
     <string name="prefs">imglogin</string>
     <string name="securtoken">tokenstr</string>
+    <string name="action_settings">dosettings</string>
+
+
+
+
+    <string name="pref_show_bass_label">Show Bass</string>
+    <!-- Key name for storing bass in SharedPreferences -->
+    <string name="pref_show_bass_key" translatable="false">show_bass</string>
+
+    <!-- Label for the show mid range checkbox preference -->
+    <string name="pref_show_mid_range_label">Show Mid Range</string>
+    <!-- Key name for storing mid range in SharedPreferences -->
+    <string name="pref_show_mid_range_key" translatable="false">show_mid_range</string>
+
+    <!-- Label for the show treble checkbox preference -->
+    <string name="pref_show_treble_label">Show Treble</string>
+    <!-- Key name for storing treble in SharedPreferences -->
+    <string name="pref_show_treble_key" translatable="false">show_treble</string>
+
+    <!-- Summary for Checkboxes -->
+    <string name="pref_show_true">Shown</string>
+    <string name="pref_show_false">Hidden</string>
+
+
+    <!-- Label for the size preference -->
+    <string name="pref_size_label">Size Multiplier</string>
+
+    <!-- Key name for storing size in SharedPreferences -->
+    <string name="pref_size_key" translatable="false">size</string>
+
+    <!-- Default for size preference -->
+    <string name="pref_size_default" translatable="false">1</string>
+
+
+    <!-- Label for the color preference -->
+    <string name="pref_color_label">Shape Color</string>
+
+    <!-- Label for red color preference -->
+    <string name="pref_color_label_red">Red</string>
+    <!-- Label for blue color preference -->
+    <string name="pref_color_label_blue">Blue</string>
+    <!-- Label for green color preference -->
+    <string name="pref_color_label_green">Green</string>
+
+    <!-- Key name for color preference in SharedPreferences -->
+    <string name="pref_color_key" translatable="false">color</string>
+
+    <!-- Value in SharedPreferences for red color option -->
+    <string name="pref_color_red_value" translatable="false">red</string>
+
+    <!-- Value in SharedPreferences for blue color option -->
+    <string name="pref_color_blue_value" translatable="false">blue</string>
+
+    <!-- Value in SharedPreferences for green color option -->
+    <string name="pref_color_green_value" translatable="false">green</string>
+    <string name="action_update">update</string>
+    <string name="PREFS_NAME">myprefs</string>
+    <string name="PREFS_Arr_vals">vals</string>
+    <string name="PREFS_Arr_inds">indexes</string>
+    <string name="action_fetch">fetch</string>
+    <string name="PREFS_final_ind">finalind</string>
+    <string name="action_clear">clear db</string>
+    <string name="admin">admin</string>
+    <string name="username">username</string>
+    <string name="username_label">Username</string>
+    <string name="Password_key">pass</string>
+    <string name="pass_label">Password</string>
+    <string name="username_key">userprefkey</string>
+    <string name="action_login">do_login</string>
+    <string name="PREFS_user">userfinal</string>
+    <string name="PREFS_pass">passfinal</string>
+
 </resources>

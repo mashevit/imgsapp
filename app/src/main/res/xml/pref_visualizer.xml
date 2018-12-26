@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+
+    <EditTextPreference
+        android:defaultValue="@string/pref_size_default"
+        android:key="@string/pref_size_key"
+        android:title="@string/pref_size_label" />
+
+    <EditTextPreference
+        android:defaultValue="@string/admin"
+        android:key="@string/username_key"
+        android:title="@string/username_label" />
+
+    <EditTextPreference
+        android:defaultValue="@string/admin"
+        android:key="@string/Password_key"
+        android:title="@string/pass_label" />
+
+
+    <ListPreference
+        android:key="CityList"
+        android:title="Cities" />
+
+</PreferenceScreen>
