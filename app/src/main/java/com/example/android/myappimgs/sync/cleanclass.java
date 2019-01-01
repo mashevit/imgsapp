@@ -10,9 +10,11 @@ import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 
+import com.example.android.myappimgs.dataRoom.Imgs;
 import com.example.android.myappimgs.dataRoom.ImgsRoomDB;
 
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 
 public class cleanclass extends Activity {
@@ -47,6 +49,20 @@ public class cleanclass extends Activity {
         }
     }
 
+    synchronized public static List<Imgs> ret(final ImgsRoomDB mDb) {
+        Log.d("taggg6g13","ssaa cc" );
+
+        try {
+
+            return mService.fetch(mDb);
+
+
+
+        } catch (Exception e) {
+            /* Server probably invalid */
+            e.printStackTrace();
+        }return null;
+    }
 
 
     @Override

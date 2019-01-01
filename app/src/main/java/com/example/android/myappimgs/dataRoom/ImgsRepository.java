@@ -10,7 +10,7 @@ import java.util.List;
 public class ImgsRepository {
 
     private ImgsDao mQuestionsDao;
-    private LiveData<List<Imgs>> mAllQuestions;
+  //  private LiveData<List<Imgs>> mAllQuestions;
 
     // Note that in order to unit test the WordRepository, you have to remove the Application
     // dependency. This adds complexity and much more code, and this sample is not about testing.
@@ -19,15 +19,26 @@ public class ImgsRepository {
     public ImgsRepository(Application application) {
         ImgsRoomDB db = ImgsRoomDB.getDatabase(application);
         mQuestionsDao = db.wordDao();
-        mAllQuestions = mQuestionsDao.getAllQuestions();
+     //   mAllQuestions = mQuestionsDao.getAllQuestions();
     }
 
     // Room executes all queries on a separate thread.
     // Observed LiveData will notify the observer when the data has changed.
     public  LiveData<List<Imgs>> getmAllQuestions() {
-        return mAllQuestions;
+        return mQuestionsDao.getAllQuestions();
     }
 
+
+    public  LiveData<List<Imgs>> getbysight(String sight) {
+        return mQuestionsDao.getImgsForSight(sight);
+    }
+    public LiveData<List<Imgs>> getmAllbytrip(String name) {
+        return mQuestionsDao.sightBytrip(name);
+    }
+
+    public LiveData<List<String>> getmAllSights() {
+        return mQuestionsDao.allsights();
+    }
 
     public void DeleteAll () {
         new delAsyncTask(mQuestionsDao).execute();

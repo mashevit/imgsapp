@@ -26,4 +26,10 @@
         android:orderInCategory="50"
         android:title="@string/action_login"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/showall"
+        android:orderInCategory="50"
+        android:title="@string/showall"
+        app:showAsAction="never" />
 </menu>

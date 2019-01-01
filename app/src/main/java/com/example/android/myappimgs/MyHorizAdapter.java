@@ -37,10 +37,11 @@ public class MyHorizAdapter extends RecyclerView.Adapter<MyHorizAdapter.MyAdapte
 
     @Override
     public void onBindViewHolder(@NonNull MyAdapterViewHolder holder, int position) {
-
+String todo= null;
+if(newData.size()>=position-1) todo=newData.get(position);
 
         Picasso.get()
-                .load(newData.get(position)).fit()
+                .load(todo).fit()
                 .placeholder(R.mipmap.qq)
                 .centerCrop()
                 .into(tv);
@@ -54,6 +55,7 @@ public class MyHorizAdapter extends RecyclerView.Adapter<MyHorizAdapter.MyAdapte
 
 
     public MyHorizAdapter(@NonNull Context context, MyHorizAdapter.MyHorizAdapterOnClickHandler clickHandler) {
+        this.newData = new ArrayList<>();
         mContext = context;
 
     }
@@ -66,8 +68,8 @@ public class MyHorizAdapter extends RecyclerView.Adapter<MyHorizAdapter.MyAdapte
 
     @Override
     public int getItemCount() {
-       return newData.size();
-    }
+      return newData.size();
+  }
 
 
     class MyAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

@@ -1,4 +1,3 @@
-/*
 package com.example.android.myappimgs.Imgs;
 
 import android.arch.lifecycle.ViewModel;
@@ -28,4 +27,3 @@ public class ImgsViewModelFactory extends ViewModelProvider.NewInstanceFactory {
         return (T) new ImgssssViewModel(mDb, mTaskId);
     }
 }
-*/

@@ -73,5 +73,6 @@
     <string name="action_login">do_login</string>
     <string name="PREFS_user">userfinal</string>
     <string name="PREFS_pass">passfinal</string>
+    <string name="showall">showall</string>
 
 </resources>

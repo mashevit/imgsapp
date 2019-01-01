@@ -17,6 +17,9 @@ public interface  ImgsDao {
     @Query("SELECT * from imgs_table")
     LiveData<List<Imgs>> getAllQuestions();
 
+
+    @Query("SELECT * from imgs_table")
+    List<Imgs> getAllQuestionsreg();
     // We do not need a conflict strategy, because the word is our primary key, and you cannot
     // add two items with the same primary key to the database. If the table has more than one
     // column, you can use @Insert(onConflict = OnConflictStrategy.REPLACE) to update a row.
@@ -26,12 +29,17 @@ public interface  ImgsDao {
     @Query("DELETE FROM IMGS_TABLE")
     void deleteAll();
 
+    @Query("SELECT sight FROM IMGS_TABLE")
+    LiveData<List<String>> allsights();
+
+    @Query("SELECT * FROM IMGS_TABLE WHERE trip LIKE :name")
+    LiveData<List<Imgs>> sightBytrip(String name);
+
 
     @Query("SELECT * FROM IMGS_TABLE WHERE sight LIKE :name")
     List<Imgs> sightByName(String name);
-   /* @Query("SELECT * FROM IMGS_TABLE WHERE sight LIKE :name")
+    @Query("SELECT * FROM IMGS_TABLE WHERE sight LIKE :name")
     LiveData<List<Imgs>> getImgsForSight(String name);
-*/
    @Query("DELETE FROM IMGS_TABLE")
    public void nukeTable();
 }

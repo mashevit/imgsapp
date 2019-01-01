@@ -1,17 +1,28 @@
 package com.example.android.myappimgs;
 
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleObserver;
+import android.arch.lifecycle.LifecycleOwner;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.OnLifecycleEvent;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.android.myappimgs.Imgs.ImgsViewModelFactory;
+import com.example.android.myappimgs.Imgs.ImgssssViewModel;
 import com.example.android.myappimgs.dataRoom.Imgs;
 import com.example.android.myappimgs.dataRoom.ImgsRoomDB;
 
@@ -20,13 +31,14 @@ import java.util.List;
 
 import static android.support.v7.widget.DividerItemDecoration.HORIZONTAL;
 
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyAdapterViewHolder> implements MyHorizAdapter.MyHorizAdapterOnClickHandler{
+public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyAdapterViewHolder> implements MyHorizAdapter.MyHorizAdapterOnClickHandler, LifecycleObserver {
     private RecyclerView mRecyclerView;
     private MyHorizAdapter myAdapter;
     private TextView textView;
  //   private TextView textViewmain;
     MyAdapterOnClickHandler mClickHandler;
     Context mContext;
+    LifecycleOwner lifecycleOwner;
    // private Cursor mCursor;
     private List<Imgs> data;
     private final String TAG = MainActivity.class.getSimpleName();
@@ -39,6 +51,19 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyAdapterViewHolde
         View view = LayoutInflater.from(mContext).inflate(layoutId, parent, false);
 
         view.setFocusable(true);
+        LinearLayoutManager layoutManager =
+                new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
+      //  mRecyclerView = (RecyclerView) view.findViewById(R.id.myrecy2);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.myrecy2);
+        DividerItemDecoration decoration = new DividerItemDecoration(mContext, HORIZONTAL);
+        mRecyclerView.addItemDecoration(decoration);
+        mRecyclerView.setLayoutManager(layoutManager);
+
+
+        mRecyclerView.setHasFixedSize(true);
+
+
+
 
         return new MyAdapterViewHolder(view);
     }
@@ -46,37 +71,45 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyAdapterViewHolde
 
     @Override
     public void onBindViewHolder(@NonNull final MyAdapterViewHolder holder, final int position) {
-        LinearLayoutManager layoutManager =
-                new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
 
-        /* setLayoutManager associates the LayoutManager we created above with our RecyclerView */
+        textView.setText(data.get(position).getSight());
 
-        textView.setText(data.get(position).getSight() );      //mCursor.getString(MainActivity.INDEX_SIGHT_MAIN));
-        DividerItemDecoration decoration = new DividerItemDecoration(mContext, HORIZONTAL);
-        mRecyclerView.addItemDecoration(decoration);
-        mRecyclerView.setLayoutManager(layoutManager);
 
-        /*
-         * Use this setting to improve performance if you know that changes in content do not
-         * change the child layout size in the RecyclerView
-         */
-        mRecyclerView.setHasFixedSize(true);
 
-        /*
-         * The ForecastAdapter is responsible for linking our weather data with the Views that
-         * will end up displaying our weather data.
-         *
-         * Although passing in "this" twice may seem strange, it is actually a sign of separation
-         * of concerns, which is best programming practice. The ForecastAdapter requires an
-         * Android Context (which all Activities are) as well as an onClickHandler. Since our
-         * MainActivity implements the ForecastAdapter ForecastOnClickHandler interface, "this"
-         * is also an instance of that type of handler.
-         */
         myAdapter = new MyHorizAdapter(mContext, this);
 
         /* Setting the adapter attaches it to the RecyclerView in our layout. */
         mRecyclerView.setAdapter(myAdapter);
         myAdapter.setData(data.get(position).getListaaddr());
+
+//        ImgsViewModelFactory factory = new ImgsViewModelFactory(mDb, data.get(position));
+//        // COMPLETED (11) Declare a AddTaskViewModel variable and initialize it by calling ViewModelProviders.of
+//        // for that use the factory created above AddTaskViewModel
+////        ImgssssViewModel viewModel
+////                = factory.create(ImgssssViewModel.class);
+//       /* final */ImgssssViewModel viewModel
+//                = ViewModelProviders.of((FragmentActivity) mContext, factory).get(ImgssssViewModel.class);
+//
+//
+///*        final AddIngrediViewModel viewModel
+//                = ViewModelProviders.of(this, factory).*/
+//        // COMPLETED (12) Observe the LiveData object in the ViewModel. Use it also when removing the observer
+//        viewModel.getDish().observe(lifecycleOwner, new Observer<List<Imgs>>() {
+//            @Override
+//            public void onChanged(@Nullable List<Imgs> imgs) {
+//                ArrayList<String> topass=new ArrayList<String>();
+//                for(int i=0;i<imgs.size();i++){ topass.addAll(imgs.get(i).getListaaddr());}
+//                Log.d(TAG + "fddff5dfdfd", "Updating list of tasks from LiveData in ViewModel" + topass);
+//
+//                myAdapter.setData(topass);
+//            }
+//
+//
+//
+//
+//
+//        });
+
 
      //   ImgsViewModelFactory factory = new ImgsViewModelFactory(mDb, "mTaskId");
         // COMPLETED (11) Declare a AddTaskViewModel variable and initialize it by calling ViewModelProviders.of
@@ -116,13 +149,18 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyAdapterViewHolde
 
 
     }
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    public void onDestroy(){
+        lifecycleOwner.getLifecycle().removeObserver(this);
+    }
 
-
-    public MyAdapter(@NonNull Context context, MyAdapterOnClickHandler clickHandler) {
+    public MyAdapter(@NonNull Context context, MyAdapterOnClickHandler clickHandler, LifecycleOwner lifecycleOwner) {
         mContext = context;
         mClickHandler = clickHandler;
         this.data = new ArrayList<>();
-
+        this.lifecycleOwner =lifecycleOwner;
+        this.lifecycleOwner.getLifecycle().addObserver(this);
+        mDb=ImgsRoomDB.getDatabase(mContext.getApplicationContext());
     }
 
     @Override
@@ -153,17 +191,17 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyAdapterViewHolde
 
     public void setData(List<Imgs> newData) {
    //     data=newData;
-        if (data != null) {
-            ImgDiffCallback postDiffCallback = new ImgDiffCallback(data, newData);
-            DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(postDiffCallback);
-
-            data.clear();
-            data.addAll(newData);
-            diffResult.dispatchUpdatesTo(this);
-        } else {
+//        if (data != null) {
+//            ImgDiffCallback postDiffCallback = new ImgDiffCallback(data, newData);
+//            DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(postDiffCallback);
+//
+//            data.clear();
+//            data.addAll(newData);
+//            diffResult.dispatchUpdatesTo(this);
+//        } else {
             // first initialization
             data = newData;
-        }
+       // }
     }
 
     class MyAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -174,7 +212,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyAdapterViewHolde
 
             mRecyclerView = (RecyclerView) itemView.findViewById(R.id.myrecy2);
             textView=itemView.findViewById(R.id.Sight);
-            mDb=ImgsRoomDB.getDatabase(mContext.getApplicationContext());
+
         }
 
         @Override
@@ -185,9 +223,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyAdapterViewHolde
 
     class ImgDiffCallback extends DiffUtil.Callback {
 
-        private final List<Imgs> oldPosts, newPosts;
+        private final List<String> oldPosts, newPosts;
 
-        public ImgDiffCallback(List<Imgs> oldPosts, List<Imgs> newPosts) {
+        public ImgDiffCallback(List<String> oldPosts, List<String> newPosts) {
             this.oldPosts = oldPosts;
             this.newPosts = newPosts;
         }
@@ -204,7 +242,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyAdapterViewHolde
 
         @Override
         public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-            return oldPosts.get(oldItemPosition).getId() == newPosts.get(newItemPosition).getId();
+            return oldPosts.get(oldItemPosition).equals(newPosts.get(newItemPosition));//.getId();
         }
 
         @Override

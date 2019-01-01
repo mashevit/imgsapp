@@ -1,10 +1,12 @@
 package com.example.android.myappimgs;
 
+import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -17,11 +19,17 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.myappimgs.Imgs.ImgsViewModelFactory;
+import com.example.android.myappimgs.Imgs.ImgssssViewModel;
 import com.example.android.myappimgs.data.ImgContract;
 import com.example.android.myappimgs.dataRoom.Imgs;
+import com.example.android.myappimgs.dataRoom.ImgsDao;
+import com.example.android.myappimgs.dataRoom.ImgsRepository;
 import com.example.android.myappimgs.dataRoom.ImgsRoomDB;
 import com.example.android.myappimgs.network.DataServiceGenerator;
 import com.example.android.myappimgs.network.Service;
@@ -49,10 +57,12 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
     private RecyclerView mRecyclerView;
     private MyAdapter myAdapter;
     private TextView tvm;
+    private ProgressBar mLoadingIndicator;
+
     private final String TAG = MainActivity.class.getSimpleName();
-
+  //  public static List<Imgs> topass=new ArrayList<Imgs>();
     private int mPosition = RecyclerView.NO_POSITION;
-
+    ImgsRepository imgsRepository;
     Service userService;
     private final int ID_FORECAST_LOADER = 44;
     private final int ID_IMG_LOADER = 72;
@@ -76,8 +86,9 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        //imgsRepository=new ImgsRepositor
         mRecyclerView = (RecyclerView) findViewById(R.id.myrecy);
+        mLoadingIndicator = (ProgressBar) findViewById(R.id.progressBar);
 
         LinearLayoutManager layoutManager =
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -87,15 +98,15 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
         mRecyclerView.addItemDecoration(decoration);
         mRecyclerView.setLayoutManager(layoutManager);
         tvm = findViewById(R.id.trip);
-
+mDb=ImgsRoomDB.getDatabase(this);
         mRecyclerView.setHasFixedSize(true);
 
-        myAdapter = new MyAdapter(this, this);
+        myAdapter = new MyAdapter(this, this,this);
 
         mRecyclerView.setAdapter(myAdapter);
 
         // getSupportLoaderManager().initLoader(ID_FORECAST_LOADER, null, this);
-        // ImgViewModel imgViewModel=ViewModelProviders.of(this).get(ImgViewModel.class);
+         //ImgViewModel imgViewModel=ViewModelProviders.of(this).get(ImgViewModel.class);
         //      if(imgViewModel.getAllQuestions()!=null) mDb.wordDao().deleteAll();
 
 
@@ -105,19 +116,22 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
         //getUsersList1();
    // fetchData();
         ///  login();
-        //    mDb=ImgsRoomDB.getDatabase(getApplicationContext());
+            mDb=ImgsRoomDB.getDatabase(getApplicationContext());
         ImgViewModel imgViewModel = ViewModelProviders.of(this).get(ImgViewModel.class);
         //  if(imgViewModel.getAllQuestions()!=null) mDb.wordDao().deleteAll();
 
-        imgViewModel.getAllQuestions().observe(this, new Observer<List<Imgs>>() {
+        imgViewModel.getbysight().observe(this, new Observer<List<Imgs>>() {
             @Override
-            public void onChanged(@Nullable List<Imgs> taskEntries) {
+            public void onChanged(@Nullable List<Imgs> strings) {
                 Log.d(TAG, "Updating list of tasks from LiveData in ViewModel");
-                myAdapter.setData(taskEntries);
-                if (taskEntries.size() > 0) tvm.setText(taskEntries.get(0).getTrip());
+                Log.d(TAG + "fddff5dfdfd", "Updating list of tasks from LiveData in ViewModel" + strings);
+                myAdapter.setData(strings); showWeatherDataView();
+               // if (strings.size() > 0) tvm.setText(taskEntries.get(0).getTrip());
             }
+
+
         });
-        //    tvm.setText(questionsModelList.get(0).getTrip());
+//        //    tvm.setText(questionsModelList.get(0).getTrip());
 
 
         //   SunshineSyncUtils.startImmediateSync(this);
@@ -176,19 +190,33 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
             return true;
         }
         else if (id == R.id.action_clear) {
-
+            showLoading();
             Intent intentToSyncImmediately = new Intent(MainActivity.this, SunshineSyncIntentService.class);
-           // intentToSyncImmediately.putExtra(SunshineSyncIntentServiceclean");
-            //intent.putExtra(MyService.EXTRA_DATA_ID1, bool);
+            intentToSyncImmediately.putExtra(SunshineSyncIntentService.EXTRA_DATA_ID, "clean");
+            // intent.putExtra(MyService.EXTRA_DATA_ID1, bool);
             //startService(intentToSyncImmediately);
             MainActivity.this.startService(intentToSyncImmediately);
-            Log.d("taggg6g11","ssaa cc" );
-            return true;
-        }  else if (id == R.id.action_login) {
-            login();
-            return true;
-        }
+            Log.d("taggg6g11", "ssaa cc");
 
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
+            return true;
+//        }  else if (id == R.id.action_login) {
+//            login();
+//            return true;
+//        } else if (id == R.id.showall) {
+////            Intent intentToSyncImmediately = new Intent(MainActivity.this, SunshineSyncIntentService.class);
+////            intentToSyncImmediately.putExtra(SunshineSyncIntentService.EXTRA_DATA_ID,"fetchdb");
+////            // intent.putExtra(MyService.EXTRA_DATA_ID1, bool);
+////            //startService(intentToSyncImmediately);
+////            MainActivity.this.startService(intentToSyncImmediately);
+////            Log.d("taggg6g11","ssaa cc" );
+//
+//            new fetchAsyncTask(mDb.wordDao()).execute();
+//            return true;
+//    }
+        }
 
         //else if (id == R.id.syncFull) {
 //        Intent intentToSyncImmediately = new Intent(MainActivity.this, foodSyncIntentSevice.class);
@@ -294,7 +322,7 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
                 //    takeAction();
 
             }
-        }, 3000);*/
+        }, 3000);*/showLoading();
         ServiceGenerator  /*DataServiceGenerator*/ dataServiceGenerator = new ServiceGenerator();//DataServiceGenerator/*()
         Service service = dataServiceGenerator.createService(Service.class);
 
@@ -314,7 +342,7 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
                 if (response.isSuccessful()) {
                     Log.d(TAG + "fddffdfdfdfd", "Updating list of tasks from LiveData in ViewModel" + "7");
 
-                    if (response != null) {
+                    if (response != null) {//topass=new ArrayList<Imgs>();
                         List<ImgModel> questionsModelList = response.body();
                         if (questionsModelList.size() > 0)
                             tvm.setText(questionsModelList.get(0).getTrip());
@@ -327,9 +355,14 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
                             Log.d(TAG + "fddffdfdfdfd", "Updating list of tasks from LiveData in ViewModel" + p);
 
                             Imgs questions = new Imgs(trip, "", sightname, p);
-
+                      //      topass.add(questions);
                             ImgViewModel.insert(questions);
+                            new insertAsyncTask1(mDb.wordDao(),"","").execute(questions);
                         }
+
+                      //  Log.d(TAG + "7dfdfd", "Updating list of tasks from LiveData in ViewModel" +topass);
+
+                     //   myAdapter.setData(topass);
 
    /*                    Handler handler = new Handler();
                         handler.postDelayed(new Runnable() {
@@ -341,7 +374,10 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
                             }
                         }, 3000);*/
                     }
-                }
+                }  Toast.makeText(MainActivity.this,"fetched!!!!",Toast.LENGTH_LONG).show();
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
             }
 
             @Override
@@ -412,7 +448,7 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
                         Set<String> vals1=settings.getStringSet(String.valueOf(R.string.PREFS_Arr_vals), null);
 //                        StringTokenizer st = new StringTokenizer(indexes, ",");
                         String[] savedList = new String[3];
-
+                        Toast.makeText(MainActivity.this,"Got Trips",Toast.LENGTH_LONG).show();
                         Log.d("tagggg0","ssaa"+ vals1+"cc" + indexes1);
    /*                    Handler handler = new Handler();
                         handler.postDelayed(new Runnable() {
@@ -462,7 +498,7 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
                          @Override
                          public void onResponse(Call<Void> call, Response<Void> response) {
                              ServiceGenerator.Token=response.headers().get("Authorization");
-
+                             Toast.makeText(MainActivity.this,"Logged In",Toast.LENGTH_LONG).show();
                             // fetchData();
                          }
 
@@ -571,4 +607,87 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
     private void initcity(SharedPreferences sharedPreferences) {
 
     }
+
+
+
+
+    private  class insertAsyncTask extends AsyncTask<Imgs, Void, Void> {
+
+        private ImgsDao mAsyncTaskDao;
+
+        insertAsyncTask(ImgsDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+
+        @Override
+        protected Void doInBackground(Imgs... imgs) {
+
+            mAsyncTaskDao.insert(imgs[0]);
+            return null;
+        }
+    }
+    private  class fetchAsyncTask extends AsyncTask<String, Void, List<Imgs>> {
+
+        private ImgsDao mAsyncTaskDao;
+
+        fetchAsyncTask(ImgsDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected List<Imgs> doInBackground(final String... params) {
+            List<Imgs> ans= mAsyncTaskDao.getAllQuestionsreg();
+            return ans;
+        }
+        @Override
+        protected void onPostExecute(List<Imgs> result) {
+            myAdapter.setData(result);
+
+        }
+    }
+
+
+
+
+
+    private static class insertAsyncTask1 extends AsyncTask<Imgs, Void, Void> {
+
+        private ImgsDao mAsyncTaskDao;
+        private String sightname;
+        private String tripname;
+        insertAsyncTask1(ImgsDao dao,String name,String tn) {
+            mAsyncTaskDao = dao;sightname=name;tripname=tn;
+        }
+
+        @Override
+        protected Void doInBackground(final Imgs... params) {
+            if (mAsyncTaskDao.sightByName(params[0].getSight()).size()==0)
+                mAsyncTaskDao.insert(params[0]);
+            return null;
+        }
+    }
+
+    private void showWeatherDataView() {
+        /* First, hide the loading indicator */
+        mLoadingIndicator.setVisibility(View.INVISIBLE);
+        /* Finally, make sure the weather data is visible */
+        mRecyclerView.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * This method will make the loading indicator visible and hide the weather View and error
+     * message.
+     * <p>
+     * Since it is okay to redundantly set the visibility of a View, we don't need to check whether
+     * each view is currently visible or invisible.
+     */
+    private void showLoading() {
+        /* Then, hide the weather data */
+        mRecyclerView.setVisibility(View.INVISIBLE);
+        /* Finally, show the loading indicator */
+        mLoadingIndicator.setVisibility(View.VISIBLE);
+    }
+
+
 }

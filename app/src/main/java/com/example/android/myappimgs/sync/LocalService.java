@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 
+import com.example.android.myappimgs.dataRoom.Imgs;
 import com.example.android.myappimgs.dataRoom.ImgsRoomDB;
 
 import org.json.JSONArray;
@@ -44,7 +45,12 @@ public class LocalService extends Service {
 
 
 
+    public static List<Imgs> fetch(ImgsRoomDB mDb){
 
+       return mDb.wordDao().getAllQuestionsreg();
+
+
+    }
 
 
 

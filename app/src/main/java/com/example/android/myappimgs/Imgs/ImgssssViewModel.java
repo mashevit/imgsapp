@@ -1,4 +1,3 @@
-/*
 package com.example.android.myappimgs.Imgs;
 
 import android.arch.lifecycle.LiveData;
@@ -28,4 +27,3 @@ public class ImgssssViewModel extends ViewModel {
     }
 }
 
-*/
