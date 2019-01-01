@@ -202,10 +202,10 @@ mDb=ImgsRoomDB.getDatabase(this);
             finish();
             startActivity(intent);
             return true;
-//        }  else if (id == R.id.action_login) {
-//            login();
-//            return true;
-//        } else if (id == R.id.showall) {
+        }  else if (id == R.id.action_login) {
+            login();
+            return true;}
+        // else if (id == R.id.showall) {
 ////            Intent intentToSyncImmediately = new Intent(MainActivity.this, SunshineSyncIntentService.class);
 ////            intentToSyncImmediately.putExtra(SunshineSyncIntentService.EXTRA_DATA_ID,"fetchdb");
 ////            // intent.putExtra(MyService.EXTRA_DATA_ID1, bool);
@@ -216,7 +216,7 @@ mDb=ImgsRoomDB.getDatabase(this);
 //            new fetchAsyncTask(mDb.wordDao()).execute();
 //            return true;
 //    }
-        }
+
 
         //else if (id == R.id.syncFull) {
 //        Intent intentToSyncImmediately = new Intent(MainActivity.this, foodSyncIntentSevice.class);
@@ -228,15 +228,7 @@ mDb=ImgsRoomDB.getDatabase(this);
 //            getUsersList();
 //            //getUsersList();
 //            return true;
-//        }else if (id == R.id.cleanAll) {
-//            //    mDb.clearAllTables();
-//            Intent intentToSyncImmediately = new Intent(MainActivity.this, foodSyncIntentSevice.class);
-//            intentToSyncImmediately.putExtra(foodSyncIntentSevice.EXTRA_DATA_ID, "clean");
-//            //intent.putExtra(MyService.EXTRA_DATA_ID1, bool);
-//            //startService(intentToSyncImmediately);
-//            MainActivity.this.startService(intentToSyncImmediately);
-//            return true;
-//        }
+
         return super.onOptionsItemSelected(item);
     }
 
