@@ -5,8 +5,6 @@
     <string name="action_settings">dosettings</string>
 
 
-
-
     <string name="pref_show_bass_label">Show Bass</string>
     <!-- Key name for storing bass in SharedPreferences -->
     <string name="pref_show_bass_key" translatable="false">show_bass</string>
@@ -74,5 +72,7 @@
     <string name="PREFS_user">userfinal</string>
     <string name="PREFS_pass">passfinal</string>
     <string name="showall">showall</string>
+    <string name="PREFS_final_tripname">tripname</string>
+    <string name="auth">auth</string>
 
 </resources>

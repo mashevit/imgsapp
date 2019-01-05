@@ -39,6 +39,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyAdapterViewHolde
     MyAdapterOnClickHandler mClickHandler;
     Context mContext;
     LifecycleOwner lifecycleOwner;
+
+    RecyclerView.RecycledViewPool viewPool;
    // private Cursor mCursor;
     private List<Imgs> data;
     private final String TAG = MainActivity.class.getSimpleName();
@@ -51,16 +53,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyAdapterViewHolde
         View view = LayoutInflater.from(mContext).inflate(layoutId, parent, false);
 
         view.setFocusable(true);
-        LinearLayoutManager layoutManager =
-                new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
-      //  mRecyclerView = (RecyclerView) view.findViewById(R.id.myrecy2);
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.myrecy2);
-        DividerItemDecoration decoration = new DividerItemDecoration(mContext, HORIZONTAL);
-        mRecyclerView.addItemDecoration(decoration);
-        mRecyclerView.setLayoutManager(layoutManager);
-
-
-        mRecyclerView.setHasFixedSize(true);
 
 
 
@@ -74,14 +66,40 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyAdapterViewHolde
 
         textView.setText(data.get(position).getSight());
 
+        /*Custom*/LinearLayoutManager layoutManager =
+                new /*Custom*/LinearLayoutManager(mContext, HORIZONTAL, false);
+        //  mRecyclerView = (RecyclerView) view.findViewById(R.id.myrecy2);
+
+        DividerItemDecoration decoration = new DividerItemDecoration(mContext, HORIZONTAL);
+        mRecyclerView.addItemDecoration(decoration);
+        mRecyclerView.setLayoutManager(layoutManager);
 
 
-        myAdapter = new MyHorizAdapter(mContext, this);
+        mRecyclerView.setHasFixedSize(false);
 
-        /* Setting the adapter attaches it to the RecyclerView in our layout. */
-        mRecyclerView.setAdapter(myAdapter);
+
+
+        myAdapter = new MyHorizAdapter(mContext);
+       // myAdapter.setData(new ArrayList<String>(){{add("blastring");}});
         myAdapter.setData(data.get(position).getListaaddr());
+        //holder.innerRecyclerView.setRecycledViewPool(viewPool);
+        mRecyclerView.setAdapter(myAdapter);
+    //    mRecyclerView.setVisibility(View.GONE);
 
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                /* Setting the adapter attaches it to the RecyclerView in our layout. */
+
+
+
+
+
+                myAdapter.setData(data.get(position).getListaaddr()); mRecyclerView.setVisibility(View.VISIBLE);
+            }
+        });
 //        ImgsViewModelFactory factory = new ImgsViewModelFactory(mDb, data.get(position));
 //        // COMPLETED (11) Declare a AddTaskViewModel variable and initialize it by calling ViewModelProviders.of
 //        // for that use the factory created above AddTaskViewModel
@@ -154,13 +172,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyAdapterViewHolde
         lifecycleOwner.getLifecycle().removeObserver(this);
     }
 
-    public MyAdapter(@NonNull Context context, MyAdapterOnClickHandler clickHandler, LifecycleOwner lifecycleOwner) {
+    public MyAdapter(@NonNull Context context,/* MyAdapterOnClickHandler clickHandler,*/ LifecycleOwner lifecycleOwner) {
         mContext = context;
-        mClickHandler = clickHandler;
+        //mClickHandler = clickHandler;
         this.data = new ArrayList<>();
         this.lifecycleOwner =lifecycleOwner;
         this.lifecycleOwner.getLifecycle().addObserver(this);
         mDb=ImgsRoomDB.getDatabase(mContext.getApplicationContext());
+        viewPool = new RecyclerView.RecycledViewPool();
     }
 
     @Override
@@ -211,6 +230,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyAdapterViewHolde
 
 
             mRecyclerView = (RecyclerView) itemView.findViewById(R.id.myrecy2);
+            mRecyclerView.setRecycledViewPool(viewPool);
             textView=itemView.findViewById(R.id.Sight);
 
         }

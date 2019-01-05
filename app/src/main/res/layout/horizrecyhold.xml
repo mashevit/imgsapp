@@ -13,12 +13,12 @@ android:layout_height="200dp"
     android:background="@color/colorPrimary"
     card_view:cardCornerRadius="4dp">
 
-<!--    <TextView
-        android:id="@+id/info_text"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="top|center_horizontal"
-        android:text="picture" />-->
+   <!--<TextView-->
+        <!--android:id="@+id/info_text"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:gravity="top|center_horizontal"-->
+        <!--android:text="picture" />-->
 
     <ImageView
         android:id="@+id/imageView"

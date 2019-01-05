@@ -10,6 +10,7 @@ import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 
+import com.example.android.myappimgs.MainActivity;
 import com.example.android.myappimgs.dataRoom.Imgs;
 import com.example.android.myappimgs.dataRoom.ImgsRoomDB;
 
@@ -54,8 +55,10 @@ public class cleanclass extends Activity {
 
         try {
 
-            return mService.fetch(mDb);
-
+            List<Imgs> ans= mService.fetch(mDb);
+            Log.d( "fddffdfdfdfd", "topass" + ans);
+            MainActivity.myAdapter.setData(ans);
+            return ans;
 
 
         } catch (Exception e) {

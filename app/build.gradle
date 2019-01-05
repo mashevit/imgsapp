@@ -16,6 +16,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
 }
 
 dependencies {
@@ -40,11 +44,13 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.3.1'
     implementation 'com.google.code.gson:gson:2.8.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
-    implementation  'com.squareup.retrofit2:converter-scalars:2.1.0'
-
-
+    implementation 'com.squareup.retrofit2:converter-scalars:2.1.0'
+    implementation 'com.github.bumptech.glide:glide:4.8.0'
+    implementation 'com.github.vivchar:RendererRecyclerViewAdapter:2.6.0'
     def room_version = "1.1.1"
     def lifecycle_version = "1.1.1"
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+
 
     // ViewModel and LiveData
     implementation "android.arch.lifecycle:extensions:$lifecycle_version"
@@ -55,8 +61,6 @@ dependencies {
 
     implementation "android.arch.lifecycle:runtime:$lifecycle_version"
     //   implementation 'com.annimon:stream:1.2.1'
-
-
 
 //    implementation 'net.sourceforge.streamsupport:streamsupport:1.6.0'
 //    implementation 'net.sourceforge.streamsupport:streamsupport-cfuture:1.6.0'

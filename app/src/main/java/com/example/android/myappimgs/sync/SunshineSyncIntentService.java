@@ -8,9 +8,14 @@ import android.content.Intent;
 import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.example.android.myappimgs.Main2Activity;
 import com.example.android.myappimgs.MainActivity;
+import com.example.android.myappimgs.dataRoom.Imgs;
 import com.example.android.myappimgs.dataRoom.ImgsRoomDB;
+
+import java.util.List;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -37,8 +42,11 @@ public class SunshineSyncIntentService extends IntentService {
         }
         if(todohere.equals("clean")){
         Log.d("taggg6g12","ssaa cc" );
-        cleanclass.clean(mdb);}
+        cleanclass.clean(mdb);todohere="";}
 
-        else{//MainActivity.topass=  cleanclass.ret(mdb);}
+        else{List<Imgs> ans= cleanclass.ret(mdb);
+            Main2Activity.topass= ans;
+      //  MainActivity.myAdapter.setData(ans);
+            Toast.makeText(this,"Passed Data to views",Toast.LENGTH_LONG);}
     }}
-}
+

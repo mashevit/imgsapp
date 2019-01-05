@@ -1,7 +1,11 @@
 package com.example.android.myappimgs.network;
 
 
+import android.content.SharedPreferences;
+import android.support.v7.preference.PreferenceManager;
+
 import com.example.android.myappimgs.BuildConfig;
+import com.example.android.myappimgs.MainActivity;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -102,7 +106,9 @@ public class ServiceGenerator {
         @Override
         public okhttp3.Response intercept(Chain chain) throws IOException {
             Request original = chain.request();
+           /// SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences (getActivity().getApplicationContext());//getSharedPreferences(String.valueOf(R.string.PREFS_NAME), 0);
 
+           // String auth=
             Request.Builder builder = original.newBuilder()
                     .header("Authorization", authToken);
 

@@ -20,10 +20,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.android.myappimgs.Imgs.ImgsViewModelFactory;
 import com.example.android.myappimgs.Imgs.ImgssssViewModel;
 import com.example.android.myappimgs.data.ImgContract;
@@ -39,6 +41,12 @@ import com.example.android.myappimgs.pojos.TripsModel;
 import com.example.android.myappimgs.prefs.SettingsActivity;
 import com.example.android.myappimgs.remote.APIUtils;
 import com.example.android.myappimgs.sync.SunshineSyncIntentService;
+import com.github.vivchar.rendererrecyclerviewadapter.DefaultCompositeViewModel;
+import com.github.vivchar.rendererrecyclerviewadapter.RendererRecyclerViewAdapter;
+import com.github.vivchar.rendererrecyclerviewadapter.ViewRenderer;
+import com.github.vivchar.rendererrecyclerviewadapter.binder.CompositeViewBinder;
+import com.github.vivchar.rendererrecyclerviewadapter.binder.ViewBinder;
+import com.github.vivchar.rendererrecyclerviewadapter.binder.ViewProvider;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -55,12 +63,12 @@ import static android.support.v7.widget.DividerItemDecoration.VERTICAL;
 
 public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapterOnClickHandler, SharedPreferences.OnSharedPreferenceChangeListener/*, LoaderManager.LoaderCallbacks<Cursor>*/ {
     private RecyclerView mRecyclerView;
-    private MyAdapter myAdapter;
+    public static MyAdapter myAdapter;
     private TextView tvm;
     private ProgressBar mLoadingIndicator;
 
     private final String TAG = MainActivity.class.getSimpleName();
-  //  public static List<Imgs> topass=new ArrayList<Imgs>();
+   public static List<Imgs> topass;
     private int mPosition = RecyclerView.NO_POSITION;
     ImgsRepository imgsRepository;
     Service userService;
@@ -85,29 +93,49 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.horizrecyhold);
         //imgsRepository=new ImgsRepositor
-        mRecyclerView = (RecyclerView) findViewById(R.id.myrecy);
-        mLoadingIndicator = (ProgressBar) findViewById(R.id.progressBar);
 
+
+
+
+//
+//
+//        RendererRecyclerViewAdapter adapter = new RendererRecyclerViewAdapter();
+//        adapter.registerRenderer(getParentItemViewBinder().registerRenderer(getChildItemViewBinder()));
+//        adapter.setItems(getParentItems());
+
+
+
+
+
+
+    //    mRecyclerView = (RecyclerView) findViewById(R.id.myrecy);
+    //    mLoadingIndicator = (ProgressBar) findViewById(R.id.progressBar);
+        if(topass==null){
+        topass=new ArrayList<Imgs>();}
         LinearLayoutManager layoutManager =
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         userService = APIUtils.getUserService();
 
         DividerItemDecoration decoration = new DividerItemDecoration(getApplicationContext(), VERTICAL);
-        mRecyclerView.addItemDecoration(decoration);
-        mRecyclerView.setLayoutManager(layoutManager);
-        tvm = findViewById(R.id.trip);
+    //    mRecyclerView.addItemDecoration(decoration);
+   //     mRecyclerView.setLayoutManager(layoutManager);
+       // tvm = findViewById(R.id.trip);
 mDb=ImgsRoomDB.getDatabase(this);
-        mRecyclerView.setHasFixedSize(true);
+   //     mRecyclerView.setHasFixedSize(false);
 
-        myAdapter = new MyAdapter(this, this,this);
-
-        mRecyclerView.setAdapter(myAdapter);
+    //    myAdapter = new MyAdapter(this, this/*,this*/);
+   //     myAdapter.setData(topass);
+    //    mRecyclerView.setAdapter(myAdapter);
 
         // getSupportLoaderManager().initLoader(ID_FORECAST_LOADER, null, this);
-         //ImgViewModel imgViewModel=ViewModelProviders.of(this).get(ImgViewModel.class);
+         ImgViewModel imgViewModel=ViewModelProviders.of(this).get(ImgViewModel.class);
         //      if(imgViewModel.getAllQuestions()!=null) mDb.wordDao().deleteAll();
+        SharedPreferences settings = android.preference.PreferenceManager.getDefaultSharedPreferences (MainActivity.this);//getActivity().getApplicationContext().getSharedPreferences(String.valueOf(R.string.PREFS_NAME), 0);
+        String tripname = settings.getString(String.valueOf(R.string.PREFS_final_tripname),"null trip");
+   //     tvm.setText(tripname);
+
 
 
         userService = APIUtils.getUserService();
@@ -117,20 +145,27 @@ mDb=ImgsRoomDB.getDatabase(this);
    // fetchData();
         ///  login();
             mDb=ImgsRoomDB.getDatabase(getApplicationContext());
-        ImgViewModel imgViewModel = ViewModelProviders.of(this).get(ImgViewModel.class);
+   //     ImgViewModel imgViewModel = ViewModelProviders.of(this).get(ImgViewModel.class);
         //  if(imgViewModel.getAllQuestions()!=null) mDb.wordDao().deleteAll();
 
-        imgViewModel.getbysight().observe(this, new Observer<List<Imgs>>() {
-            @Override
-            public void onChanged(@Nullable List<Imgs> strings) {
-                Log.d(TAG, "Updating list of tasks from LiveData in ViewModel");
-                Log.d(TAG + "fddff5dfdfd", "Updating list of tasks from LiveData in ViewModel" + strings);
-                myAdapter.setData(strings); showWeatherDataView();
-               // if (strings.size() > 0) tvm.setText(taskEntries.get(0).getTrip());
-            }
+//        imgViewModel.getbysight().observe(this, new Observer<List<Imgs>>() {
+//            @Override
+//            public void onChanged(@Nullable List<Imgs> strings) {
+//                Log.d(TAG, "Updating list of tasks from LiveData in ViewModel");
+//                Log.d(TAG + "fddff5dfdfd", "Updating list of tasks from LiveData in ViewModel" + strings);
+//                if(null!=strings&&myAdapter.getItemCount()<2)
+//
+//                myAdapter.setData(strings);
+//
+//                Intent intent = getIntent();
+//                finish();
+//                startActivity(intent);
+//                ///showWeatherDataView();
+//               // if (strings.size() > 0) tvm.setText(taskEntries.get(0).getTrip());
+//            }
 
 
-        });
+      //  });
 //        //    tvm.setText(questionsModelList.get(0).getTrip());
 
 
@@ -190,7 +225,7 @@ mDb=ImgsRoomDB.getDatabase(this);
             return true;
         }
         else if (id == R.id.action_clear) {
-            showLoading();
+           // showLoading();
             Intent intentToSyncImmediately = new Intent(MainActivity.this, SunshineSyncIntentService.class);
             intentToSyncImmediately.putExtra(SunshineSyncIntentService.EXTRA_DATA_ID, "clean");
             // intent.putExtra(MyService.EXTRA_DATA_ID1, bool);
@@ -198,24 +233,33 @@ mDb=ImgsRoomDB.getDatabase(this);
             MainActivity.this.startService(intentToSyncImmediately);
             Log.d("taggg6g11", "ssaa cc");
 
-            Intent intent = getIntent();
-            finish();
-            startActivity(intent);
+//            Intent intent = getIntent();
+//            finish();
+//            startActivity(intent);
             return true;
         }  else if (id == R.id.action_login) {
             login();
             return true;}
-        // else if (id == R.id.showall) {
-////            Intent intentToSyncImmediately = new Intent(MainActivity.this, SunshineSyncIntentService.class);
-////            intentToSyncImmediately.putExtra(SunshineSyncIntentService.EXTRA_DATA_ID,"fetchdb");
-////            // intent.putExtra(MyService.EXTRA_DATA_ID1, bool);
-////            //startService(intentToSyncImmediately);
-////            MainActivity.this.startService(intentToSyncImmediately);
-////            Log.d("taggg6g11","ssaa cc" );
-//
-//            new fetchAsyncTask(mDb.wordDao()).execute();
-//            return true;
-//    }
+         else if (id == R.id.showall) {
+//            Intent intentToSyncImmediately = new Intent(MainActivity.this, SunshineSyncIntentService.class);
+//            intentToSyncImmediately.putExtra(SunshineSyncIntentService.EXTRA_DATA_ID,"fetchdb");
+//            // intent.putExtra(MyService.EXTRA_DATA_ID1, bool);
+//            //startService(intentToSyncImmediately);
+//            MainActivity.this.startService(intentToSyncImmediately);
+            Log.d("taggg6g11","ssaa cc" );
+
+            //new fetchAsyncTask(mDb.wordDao()).execute();
+
+
+            Intent intentToSyncImmediately2 = new Intent(MainActivity.this, Main2Activity.class);
+           // intentToSyncImmediately.putExtra(SunshineSyncIntentService.EXTRA_DATA_ID,"fetchdb");
+            // intent.putExtra(MyService.EXTRA_DATA_ID1, bool);
+            //startService(intentToSyncImmediately);
+            MainActivity.this.startActivity(intentToSyncImmediately2);
+
+
+            return true;
+    }
 
 
         //else if (id == R.id.syncFull) {
@@ -299,10 +343,57 @@ mDb=ImgsRoomDB.getDatabase(this);
 
 
 
+    private CompositeViewBinder getParentItemViewBinder() {
+        return new CompositeViewBinder<>(
+                R.layout.activity_main,
+                R.id.myrecy,
+                DefaultCompositeViewModel.class /* imported from library */
+                //new ViewBinder.Binder(){...} /* if you need bind something else */
+        );
+    }
+
+
+
+    private List<DefaultCompositeViewModel> getParentItems() {
+        ArrayList<DefaultCompositeViewModel> parents = new ArrayList();
+        for (int i=0;i<topass.size();i++) {
+            ArrayList<ChildItem> children = new ArrayList();
+            Imgs qqw=topass.get(i);
+            for (int h=0;h<qqw.getImgaddr().length();h++) {
+               // ChildItem qwq=new ChildItem(qqw.getImgaddr());
+                children.add(new ChildItem(qqw.getListaaddr().get(h)));
+            }
+            parents.add(new DefaultCompositeViewModel(children));
+        }
+        return parents;
+    }
 
 
 
 
+    private ViewBinder getChildItemViewBinder() {
+//        return new ViewBinder<>(
+//                        R.layout.horizrecyhold,
+//                        ChildItem.class,
+//                        (model, finder, payloads) -> finder {
+//                    ImageView imageView = finder.find(R.id.imageView);
+//        Glide.with(getContext()).load(model.getUrl()).into(imageView);
+//                }
+//        )
+
+        return new ViewBinder<>(
+                R.layout.horizrecyhold,
+                ChildItem.class,
+                (model, finder, payloads) -> finder
+                        //.setText(R.id.title, model.getTitle())
+                        //.setTextColor(R.id.text, model.getTitleColor())
+                        //.setImageBitmap(R.id.image, model.getImageBitmap())
+                        //.setOnClickListener(R.id.button, new OnClickListener() {...})
+                       .find(R.id.imageView, (ViewProvider<ImageView>) imageView -> {
+			Glide.with(this).load(model.getTitle()).into(imageView);
+		})
+        );
+    }
     private void fetchData() {
         //relativeLayout.setVisibility(View.VISIBLE);
 
@@ -314,7 +405,7 @@ mDb=ImgsRoomDB.getDatabase(this);
                 //    takeAction();
 
             }
-        }, 3000);*/showLoading();
+        }, 3000);*///showLoading();
         ServiceGenerator  /*DataServiceGenerator*/ dataServiceGenerator = new ServiceGenerator();//DataServiceGenerator/*()
         Service service = dataServiceGenerator.createService(Service.class);
 
@@ -334,10 +425,10 @@ mDb=ImgsRoomDB.getDatabase(this);
                 if (response.isSuccessful()) {
                     Log.d(TAG + "fddffdfdfdfd", "Updating list of tasks from LiveData in ViewModel" + "7");
 
-                    if (response != null) {//topass=new ArrayList<Imgs>();
+                    if (response != null) {topass=new ArrayList<Imgs>();
                         List<ImgModel> questionsModelList = response.body();
                         if (questionsModelList.size() > 0)
-                            tvm.setText(questionsModelList.get(0).getTrip());
+//                            tvm.setText(questionsModelList.get(0).getTrip());
                         for (int i = 0; i < questionsModelList.size(); i++) {
                             // String addr = questionsModelList.get(i).getImgaddr();
                             String sightname = questionsModelList.get(i).getSight();
@@ -347,15 +438,23 @@ mDb=ImgsRoomDB.getDatabase(this);
                             Log.d(TAG + "fddffdfdfdfd", "Updating list of tasks from LiveData in ViewModel" + p);
 
                             Imgs questions = new Imgs(trip, "", sightname, p);
-                      //      topass.add(questions);
+                           topass.add(questions);
                             ImgViewModel.insert(questions);
-                            new insertAsyncTask1(mDb.wordDao(),"","").execute(questions);
+                           // new insertAsyncTask1(mDb.wordDao(),"","").execute(questions);
                         }
 
                       //  Log.d(TAG + "7dfdfd", "Updating list of tasks from LiveData in ViewModel" +topass);
+                        Log.d(TAG + "fddffdfdfdfd", "topass" + topass);
+                       // myAdapter.setData(topass);
 
-                     //   myAdapter.setData(topass);
+                        Intent intentToSyncImmediately2 = new Intent(MainActivity.this, Main2Activity.class);
+                        // intentToSyncImmediately.putExtra(SunshineSyncIntentService.EXTRA_DATA_ID,"fetchdb");
+                        // intent.putExtra(MyService.EXTRA_DATA_ID1, bool);
+                        //startService(intentToSyncImmediately);
 
+                        Main2Activity.topass=topass;
+                        MainActivity.this.startActivity(intentToSyncImmediately2);
+                        Toast.makeText(MainActivity.this,"fetched!!!!",Toast.LENGTH_LONG).show();
    /*                    Handler handler = new Handler();
                         handler.postDelayed(new Runnable() {
                             @Override
@@ -366,10 +465,10 @@ mDb=ImgsRoomDB.getDatabase(this);
                             }
                         }, 3000);*/
                     }
-                }  Toast.makeText(MainActivity.this,"fetched!!!!",Toast.LENGTH_LONG).show();
-                Intent intent = getIntent();
-                finish();
-                startActivity(intent);
+                }
+//                Intent intent = getIntent();
+//                finish();
+//                startActivity(intent);
             }
 
             @Override
@@ -489,8 +588,23 @@ mDb=ImgsRoomDB.getDatabase(this);
 
                          @Override
                          public void onResponse(Call<Void> call, Response<Void> response) {
-                             ServiceGenerator.Token=response.headers().get("Authorization");
-                             Toast.makeText(MainActivity.this,"Logged In",Toast.LENGTH_LONG).show();
+                             String auth=response.headers().get("Authorization");
+                             if(null==auth)  Toast.makeText(MainActivity.this,"NOT AUTHORIZED",Toast.LENGTH_LONG).show();
+                             else {
+                                 ServiceGenerator.Token = auth;//response.headers().get("Authorization");
+
+                                 SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences (MainActivity.this);//getSharedPreferences(String.valueOf(R.string.PREFS_NAME), 0);
+
+                                 SharedPreferences.Editor editor = settings.edit();
+                                 editor.putString(String.valueOf(R.string.auth),auth);
+                                 editor.commit();
+
+
+
+
+
+                                 Toast.makeText(MainActivity.this, "Logged In", Toast.LENGTH_LONG).show();
+                             }
                             // fetchData();
                          }
 
@@ -659,27 +773,27 @@ mDb=ImgsRoomDB.getDatabase(this);
             return null;
         }
     }
-
-    private void showWeatherDataView() {
-        /* First, hide the loading indicator */
-        mLoadingIndicator.setVisibility(View.INVISIBLE);
-        /* Finally, make sure the weather data is visible */
-        mRecyclerView.setVisibility(View.VISIBLE);
-    }
-
-    /**
-     * This method will make the loading indicator visible and hide the weather View and error
-     * message.
-     * <p>
-     * Since it is okay to redundantly set the visibility of a View, we don't need to check whether
-     * each view is currently visible or invisible.
-     */
-    private void showLoading() {
-        /* Then, hide the weather data */
-        mRecyclerView.setVisibility(View.INVISIBLE);
-        /* Finally, show the loading indicator */
-        mLoadingIndicator.setVisibility(View.VISIBLE);
-    }
+//
+//    private void showWeatherDataView() {
+//        /* First, hide the loading indicator */
+//        mLoadingIndicator.setVisibility(View.INVISIBLE);
+//        /* Finally, make sure the weather data is visible */
+//        mRecyclerView.setVisibility(View.VISIBLE);
+//    }
+//
+//    /**
+//     * This method will make the loading indicator visible and hide the weather View and error
+//     * message.
+//     * <p>
+//     * Since it is okay to redundantly set the visibility of a View, we don't need to check whether
+//     * each view is currently visible or invisible.
+//     */
+//    private void showLoading() {
+//        /* Then, hide the weather data */
+//        mRecyclerView.setVisibility(View.INVISIBLE);
+//        /* Finally, show the loading indicator */
+//        mLoadingIndicator.setVisibility(View.VISIBLE);
+//    }
 
 
 }

@@ -138,10 +138,11 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
                 int index = mylistpreference.findIndexOfValue(selected);  // <- selected taken from your code above
                 //  String entry = mylistpreference.getEntries()[index];// getPreferenceScreen().findPreference(key);
                 String entry = (String) mylistpreference.getEntryValues()[index];
+                String toput1=(String) mylistpreference.getEntries()[index];
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putString(String.valueOf(R.string.PREFS_final_ind),entry);
                 // editor.putString(String.valueOf(R.string.PREFS_Arr_inds),str.toString());
-
+                editor.putString(String.valueOf(R.string.PREFS_final_tripname),toput1);
                 editor.commit();
 
                 Log.d("tagggg3","ssaa"+ index+"cc" );

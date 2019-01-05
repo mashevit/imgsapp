@@ -10,9 +10,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.android.myappimgs.dataRoom.Imgs;
 import com.squareup.picasso.Picasso;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,13 +42,22 @@ public class MyHorizAdapter extends RecyclerView.Adapter<MyHorizAdapter.MyAdapte
     public void onBindViewHolder(@NonNull MyAdapterViewHolder holder, int position) {
 String todo= null;
 if(newData.size()>=position-1) todo=newData.get(position);
+//
+//
+//        Glide.with(context)
+//                .load(data.getImageUrl())
+//                .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                .into(holder.thumbnail);
 
+        tv.setImageResource(R.mipmap.qq);
         Picasso.get()
                 .load(todo).fit()
                 .placeholder(R.mipmap.qq)
                 .centerCrop()
                 .into(tv);
-//tv.setText(newData.get(position));
+
+//        tv.setImageResource(R.mipmap.qq);
+//        new ImageLoadTask(todo, tv).execute();
     }
 
 
@@ -54,7 +66,7 @@ if(newData.size()>=position-1) todo=newData.get(position);
     }
 
 
-    public MyHorizAdapter(@NonNull Context context, MyHorizAdapter.MyHorizAdapterOnClickHandler clickHandler) {
+    public MyHorizAdapter(@NonNull Context context/* MyHorizAdapter.MyHorizAdapterOnClickHandler clickHandler*/) {
         this.newData = new ArrayList<>();
         mContext = context;
 
