@@ -2,6 +2,7 @@ package com.example.android.myappimgs;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -27,6 +28,7 @@ import com.github.vivchar.rendererrecyclerviewadapter.RendererRecyclerViewAdapte
 import com.github.vivchar.rendererrecyclerviewadapter.ViewRenderer;
 import com.github.vivchar.rendererrecyclerviewadapter.binder.CompositeViewBinder;
 import com.github.vivchar.rendererrecyclerviewadapter.binder.ViewBinder;
+import com.github.vivchar.rendererrecyclerviewadapter.binder.ViewFinder;
 import com.github.vivchar.rendererrecyclerviewadapter.binder.ViewProvider;
 
 import java.util.ArrayList;
@@ -50,8 +52,8 @@ public class Main2Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragmentlist);
-
+        setContentView(R.layout.activity_main2);
+        tvm = findViewById(R.id.trip);
 
 
 
@@ -59,9 +61,10 @@ public class Main2Activity extends AppCompatActivity {
 
         adapter.registerRenderer(
                 new CompositeViewBinder<>(
-                        R.layout.item_simple_composite,
-                        R.id.recycler_view,
-                        DefaultCompositeViewModel.class
+                        R.layout.mainrecyhold,
+                        R.id.myrecy2,
+                        DefaultCompositeViewModel.class,
+                        (model, finder, payloads) -> finder.setText(R.id.Sight,((ChildItem) (model.getItems().get(0))).getSight())
                        // Collections.singletonList(new BetweenSpacesItemDecoration(10, 10))
                 ).registerRenderer(getAnyViewRenderer())
         );
@@ -70,8 +73,12 @@ public class Main2Activity extends AppCompatActivity {
 
         adapter.setItems(getParentItems());
 
-        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.myrecy);
         recyclerView.setAdapter(adapter);
+
+       SharedPreferences settings = android.preference.PreferenceManager.getDefaultSharedPreferences (Main2Activity.this);//getActivity().getApplicationContext().getSharedPreferences(String.valueOf(R.string.PREFS_NAME), 0);
+        String tripname = settings.getString(String.valueOf(R.string.PREFS_final_tripname),"null trip");
+       tvm.setText(tripname);
       //  recyclerView.addItemDecoration(new BetweenSpacesItemDecoration(10, 10));
 
      //   return view;
@@ -79,9 +86,9 @@ public class Main2Activity extends AppCompatActivity {
 
     private ViewBinder getAnyViewRenderer() {
         return new ViewBinder<>(
-                R.layout.item_simple_square,
+                R.layout.horizrecyhold,
                 ChildItem.class,
-                (model, finder, payloads) -> finder.find(R.id.text, (ViewProvider<ImageView>) imageView -> {
+                (model, finder, payloads) -> finder.find(R.id.imageView, (ViewProvider<ImageView>) imageView -> {
                     Glide.with(this).load(model.getTitle()).into(imageView);})
         );
     }
@@ -97,7 +104,7 @@ public class Main2Activity extends AppCompatActivity {
             Imgs qqw=topass.get(i);
             for (int h=0;h<qqw.getListaaddr().size();h++) {
                 // ChildItem qwq=new ChildItem(qqw.getImgaddr());
-                children.add(new ChildItem(qqw.getListaaddr().get(h)));
+                children.add(new ChildItem(qqw.getListaaddr().get(h),qqw.getSight()));
             }
             parents.add(new DefaultCompositeViewModel(children));
         }
