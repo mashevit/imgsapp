@@ -2,16 +2,14 @@ package com.example.android.myappimgs;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -21,21 +19,15 @@ import com.example.android.myappimgs.dataRoom.Imgs;
 import com.example.android.myappimgs.dataRoom.ImgsRepository;
 import com.example.android.myappimgs.dataRoom.ImgsRoomDB;
 import com.example.android.myappimgs.prefs.SettingsActivity;
-import com.example.android.myappimgs.remote.APIUtils;
 import com.example.android.myappimgs.sync.SunshineSyncIntentService;
 import com.github.vivchar.rendererrecyclerviewadapter.DefaultCompositeViewModel;
 import com.github.vivchar.rendererrecyclerviewadapter.RendererRecyclerViewAdapter;
-import com.github.vivchar.rendererrecyclerviewadapter.ViewRenderer;
 import com.github.vivchar.rendererrecyclerviewadapter.binder.CompositeViewBinder;
 import com.github.vivchar.rendererrecyclerviewadapter.binder.ViewBinder;
-import com.github.vivchar.rendererrecyclerviewadapter.binder.ViewFinder;
 import com.github.vivchar.rendererrecyclerviewadapter.binder.ViewProvider;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-
-import static android.support.v7.widget.DividerItemDecoration.VERTICAL;
 
 public class Main2Activity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
@@ -46,15 +38,15 @@ public class Main2Activity extends AppCompatActivity {
     private ImgsRoomDB mDb;
     RendererRecyclerViewAdapter adapter;
     private final String TAG = MainActivity.class.getSimpleName();
-   // public static List<Imgs> topass;
+    // public static List<Imgs> topass;
     private int mPosition = RecyclerView.NO_POSITION;
     ImgsRepository imgsRepository;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
         tvm = findViewById(R.id.trip);
-
 
 
         final RendererRecyclerViewAdapter adapter = new RendererRecyclerViewAdapter();
@@ -64,8 +56,8 @@ public class Main2Activity extends AppCompatActivity {
                         R.layout.mainrecyhold,
                         R.id.myrecy2,
                         DefaultCompositeViewModel.class,
-                        (model, finder, payloads) -> finder.setText(R.id.Sight,((ChildItem) (model.getItems().get(0))).getSight())
-                       // Collections.singletonList(new BetweenSpacesItemDecoration(10, 10))
+                        (model, finder, payloads) -> finder.setText(R.id.Sight, ((ChildItem) (model.getItems().get(0))).getSight())
+                        // Collections.singletonList(new BetweenSpacesItemDecoration(10, 10))
                 ).registerRenderer(getAnyViewRenderer())
         );
 //		adapter.registerRenderer(...);
@@ -76,12 +68,12 @@ public class Main2Activity extends AppCompatActivity {
         final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.myrecy);
         recyclerView.setAdapter(adapter);
 
-       SharedPreferences settings = android.preference.PreferenceManager.getDefaultSharedPreferences (Main2Activity.this);//getActivity().getApplicationContext().getSharedPreferences(String.valueOf(R.string.PREFS_NAME), 0);
-        String tripname = settings.getString(String.valueOf(R.string.PREFS_final_tripname),"null trip");
-       tvm.setText(tripname);
-      //  recyclerView.addItemDecoration(new BetweenSpacesItemDecoration(10, 10));
+        SharedPreferences settings = android.preference.PreferenceManager.getDefaultSharedPreferences(Main2Activity.this);//getActivity().getApplicationContext().getSharedPreferences(String.valueOf(R.string.PREFS_NAME), 0);
+        String tripname = settings.getString(String.valueOf(R.string.PREFS_final_tripname), "null trip");
+        tvm.setText(tripname);
+        //  recyclerView.addItemDecoration(new BetweenSpacesItemDecoration(10, 10));
 
-     //   return view;
+        //   return view;
     }
 
     private ViewBinder getAnyViewRenderer() {
@@ -89,22 +81,28 @@ public class Main2Activity extends AppCompatActivity {
                 R.layout.horizrecyhold,
                 ChildItem.class,
                 (model, finder, payloads) -> finder.find(R.id.imageView, (ViewProvider<ImageView>) imageView -> {
-                    Glide.with(this).load(model.getTitle()).into(imageView);})
-        );
+                    Glide.with(this).load(model.getTitle()).into(imageView);
+                })
+                        .setOnClickListener(R.id.imageView, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent startActivity = new Intent(Main2Activity.this, FullscreenActivity.class);
+                                startActivity.putExtra(FullscreenActivity.EXTRA_TASK_ID, model.getTitle());
+                                startActivity(startActivity);
+                            }
+                        }));
     }
 
 
-
-
     public static List<DefaultCompositeViewModel> getParentItems() {
-        ArrayList<DefaultCompositeViewModel> parents = new ArrayList();
+        ArrayList<DefaultCompositeViewModel> parents = new ArrayList<DefaultCompositeViewModel>();
 
-        for (int i=0;i<topass.size();i++) {
+        for (int i = 0; i < topass.size(); i++) {
             ArrayList<ChildItem> children = new ArrayList();
-            Imgs qqw=topass.get(i);
-            for (int h=0;h<qqw.getListaaddr().size();h++) {
+            Imgs qqw = topass.get(i);
+            for (int h = 0; h < qqw.getListaaddr().size(); h++) {
                 // ChildItem qwq=new ChildItem(qqw.getImgaddr());
-                children.add(new ChildItem(qqw.getListaaddr().get(h),qqw.getSight()));
+                children.add(new ChildItem(qqw.getListaaddr().get(h), qqw.getSight()));
             }
             parents.add(new DefaultCompositeViewModel(children));
         }
@@ -112,9 +110,7 @@ public class Main2Activity extends AppCompatActivity {
     }
 
 
-
-
-//         tvm = findViewById(R.id.trip);
+    //         tvm = findViewById(R.id.trip);
 //
 //
 //        adapter = new RendererRecyclerViewAdapter();
@@ -223,7 +219,6 @@ public class Main2Activity extends AppCompatActivity {
      * Callback invoked when a menu item was selected from this Activity's menu.
      *
      * @param item The menu item that was selected by the user
-     *
      * @return true if you handle the menu click here, false otherwise
      */
     @Override
@@ -233,8 +228,7 @@ public class Main2Activity extends AppCompatActivity {
 
         if (id == R.id.action_update) {
 
-        //    fetchtrips();
-
+            //    fetchtrips();
 
 
             return true;
@@ -243,17 +237,16 @@ public class Main2Activity extends AppCompatActivity {
 //            SharedPreferences.Editor editor = settings.edit();
 //
 //            editor.putStringSet(String.valueOf(R.string.PREFS_Arr_vals),);
-        }else if (id == R.id.action_settings) {
+        } else if (id == R.id.action_settings) {
             Intent startSettingsActivity = new Intent(this, SettingsActivity.class);
             startActivity(startSettingsActivity);
             return true;
-        }else if (id == R.id.action_fetch) {
-           // fetchData();//getUsersList();//fetchData();
+        } else if (id == R.id.action_fetch) {
+            // fetchData();//getUsersList();//fetchData();
             adapter.setItems(getParentItems());
 
             return true;
-        }
-        else if (id == R.id.action_clear) {
+        } else if (id == R.id.action_clear) {
             // showLoading();
             Intent intentToSyncImmediately = new Intent(Main2Activity.this, SunshineSyncIntentService.class);
             intentToSyncImmediately.putExtra(SunshineSyncIntentService.EXTRA_DATA_ID, "clean");
@@ -266,16 +259,16 @@ public class Main2Activity extends AppCompatActivity {
 //            finish();
 //            startActivity(intent);
             return true;
-        }  else if (id == R.id.action_login) {
+        } else if (id == R.id.action_login) {
             //login();
-            return true;}
-        else if (id == R.id.showall) {
+            return true;
+        } else if (id == R.id.showall) {
             Intent intentToSyncImmediately = new Intent(Main2Activity.this, SunshineSyncIntentService.class);
-            intentToSyncImmediately.putExtra(SunshineSyncIntentService.EXTRA_DATA_ID,"fetchdb");
+            intentToSyncImmediately.putExtra(SunshineSyncIntentService.EXTRA_DATA_ID, "fetchdb");
             // intent.putExtra(MyService.EXTRA_DATA_ID1, bool);
             //startService(intentToSyncImmediately);
             Main2Activity.this.startService(intentToSyncImmediately);
-            Log.d("taggg6g11","ssaa cc" );
+            Log.d("taggg6g11", "ssaa cc");
 
             //new fetchAsyncTask(mDb.wordDao()).execute();
 
@@ -304,9 +297,6 @@ public class Main2Activity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-
-
 
 
 //

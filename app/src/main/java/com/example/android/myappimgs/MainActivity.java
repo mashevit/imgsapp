@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.horizrecyhold);
+        setContentView(R.layout.entrancescreen);
         //imgsRepository=new ImgsRepositor
 
 
@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
         DividerItemDecoration decoration = new DividerItemDecoration(getApplicationContext(), VERTICAL);
     //    mRecyclerView.addItemDecoration(decoration);
    //     mRecyclerView.setLayoutManager(layoutManager);
-       // tvm = findViewById(R.id.trip);
+        tvm = findViewById(R.id.textView);
 mDb=ImgsRoomDB.getDatabase(this);
    //     mRecyclerView.setHasFixedSize(false);
 
@@ -134,7 +134,7 @@ mDb=ImgsRoomDB.getDatabase(this);
         //      if(imgViewModel.getAllQuestions()!=null) mDb.wordDao().deleteAll();
         SharedPreferences settings = android.preference.PreferenceManager.getDefaultSharedPreferences (MainActivity.this);//getActivity().getApplicationContext().getSharedPreferences(String.valueOf(R.string.PREFS_NAME), 0);
         String tripname = settings.getString(String.valueOf(R.string.PREFS_final_tripname),"null trip");
-   //     tvm.setText(tripname);
+        tvm.setText(tripname);
 
 
 
